@@ -26,7 +26,7 @@ router.put('/:id', validateSession, (req,res) =>{
         notes: req.body.blog.notes,
     }
    
-    const query = { where: { id: req.params.id, ownerId: req.user.id }}
+    const query = { where: { id: req.params.id }}
    
     Blog.update(updateBlog, query)
     .then(() => res.status(200).json({message: "Log Updated"}))
@@ -54,7 +54,7 @@ router.get('/:id', validateSession, (req,res) =>{
 })
 
 router.delete('/:id', validateSession, (req,res) =>{
-    const query = { where: {id: req.params.id, ownerId: req.user.id }};
+    const query = { where: {id: req.params.id,  }};
     Blog.destroy(query)
         .then(() => res.status(200).json({ message: ' has been destroyed!!'}))
         .catch((err) => res.status(500).json({ error: err}))

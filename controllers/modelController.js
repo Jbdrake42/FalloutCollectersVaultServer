@@ -49,7 +49,12 @@ router.get('/:id', validateSession, (req,res) =>{
 .then(logs => res.status(200).json(logs))
         .catch(err => res.status(500).json({ error: err }))
 })
-
+router.delete('/admin/:id', validateSession, (req,res) =>{
+    const query = { where: {id: req.params.id, }};
+    Model.destroy(query)
+        .then(() => res.status(200).json({ message: ' has been destroyed!!'}))
+        .catch((err) => res.status(500).json({ error: err}))
+})
 router.delete('/:id', validateSession, (req,res) =>{
     const query = { where: {id: req.params.id, ownerId: req.user.id }};
     Model.destroy(query)
