@@ -1,5 +1,5 @@
 
-
+const validateSession = require("../middleware/validate-session")
 const router = require('express').Router();
 const { User } = require("../models");
 const jwt = require('jsonwebtoken')
@@ -8,7 +8,9 @@ router.post('/register', (req, res) => {
     console.log('register function called')
     User.create({
         email: req.body.user.email,
-        password: bcrypt.hashSync(req.body.user.password, 15)
+        username: req.body.user.username,
+        password: bcrypt.hashSync(req.body.user.password, 15),
+        role: req.body.user.role
     })
     .then((user) => {
         let token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: 60 * 60 * 24 });
@@ -53,4 +55,11 @@ router.post('/login', (req, res) => {
     .catch( err => {
         res.status(500).json({ error: err})
 })})
+
+router.get("/", validateSession, (req, res) => {
+    const query = { where: { id: req.user.id}}
+    User.findAll(query)
+    .then(mods => res.status(200).json(mods))
+    .catch(err => res.status(500).json({ error: err }))
+})
 module.exports = router;

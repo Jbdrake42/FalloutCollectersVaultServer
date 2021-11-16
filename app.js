@@ -1,9 +1,10 @@
 require("dotenv").config();
 const Express = require("express");
 const db = require("./db");
-const user = require("./controllers")
 const app = Express();
-
+let model = require('./controllers/modelController')
+let vault =require('./controllers/VaultController')
+let blog = require('./controllers/blogController')
 // Import middlewares as a bundle
 const middlewares = require("./middleware");
 
@@ -13,7 +14,10 @@ const controllers = require("./controllers");
 // Parse the body of all requests as JSON
 app.use(Express.json());
 app.use(middlewares.CORS)
+app.use("/blog", blog)
 app.use("/user", controllers.User);
+app.use('/vault', vault)
+app.use("/model", model)
 
 const resetDatabase = {force:true}
 db.authenticate()
