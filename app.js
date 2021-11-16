@@ -25,7 +25,7 @@ db.authenticate()
 // example:  .then(() => db.sync(resetDatabase))
   .then(() => db.sync())
   .then(() =>
-    app.listen(3000, () => {
+    app.listen(process.env.PORT, () => {
       console.log(`[server]: App is listening on ${process.env.PORT}`);
     })
   )
